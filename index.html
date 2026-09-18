@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Corner of the World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#F47B20; --red:#E4002B; --green:#00804A; --deep-green:#00563A;
+  --cream:#FFF8EE; --paper:#ffffff; --ink:#1B1B19; --muted:#5d5a55; --line:#eadfce;
+  --display:"Bricolage Grotesque","Arial Black",system-ui,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+a{color:var(--deep-green)}
+.stripes{height:18px;background:linear-gradient(var(--orange) 0 33.3%,var(--red) 33.3% 66.6%,var(--green) 66.6% 100%)}
+.stripes.thin{height:9px}
+
+header.hero{background:var(--paper);position:relative;overflow:hidden}
+.hero-inner{max-width:1120px;margin:0 auto;padding:56px 20px 44px;position:relative;z-index:1}
+.kicker{display:inline-flex;gap:8px;align-items:center;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.kicker .dot{width:10px;height:10px;border-radius:50%;background:var(--green)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(46px,9vw,108px);line-height:.9;letter-spacing:-.03em;margin:14px 0 18px}
+h1 .o{color:var(--orange)} h1 .r{color:var(--red)} h1 .g{color:var(--green)}
+.dek{font-size:clamp(18px,2.2vw,22px);max-width:760px;color:var(--muted);margin:0}
+.bubbles{position:absolute;right:-60px;top:-40px;width:360px;height:360px;z-index:0}
+.bubbles span{position:absolute;border-radius:50%}
+.bubbles span:nth-child(1){width:220px;height:220px;background:var(--orange);right:60px;top:40px}
+.bubbles span:nth-child(2){width:140px;height:140px;background:var(--red);right:10px;top:180px}
+.bubbles span:nth-child(3){width:90px;height:90px;background:var(--green);right:230px;top:210px}
+@media (max-width:760px){.bubbles{opacity:.18}}
+
+.intro{max-width:1120px;margin:0 auto;padding:40px 20px 10px;display:grid;grid-template-columns:1.4fr 1fr;gap:36px}
+.intro p{margin:0 0 14px}
+.intro h2{font-family:var(--display);font-size:28px;margin:0 0 10px;line-height:1.1}
+.callout{background:var(--paper);border:3px solid var(--ink);border-radius:18px;padding:20px 22px;box-shadow:6px 6px 0 var(--orange)}
+.callout h3{font-family:var(--display);margin:0 0 8px;font-size:20px}
+.callout h3+h3{margin-top:14px}
+.callout ul{margin:0;padding-left:18px}
+.callout li{margin-bottom:6px}
+@media (max-width:860px){.intro{grid-template-columns:1fr}}
+
+.filters{position:sticky;top:0;z-index:5;background:rgba(255,248,238,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.filters-inner{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters .label{font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.chip{border:2px solid var(--ink);background:var(--paper);color:var(--ink);font-family:var(--body);font-weight:700;font-size:14px;padding:5px 13px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+.chip:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.sep{width:1px;height:24px;background:var(--line);margin:0 6px}
+.count{margin-left:auto;font-size:14px;color:var(--muted)}
+@media (max-width:640px){.sep{display:none}.count{width:100%;margin-left:0}}
+
+main{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--paper);border-radius:22px;border:3px solid var(--ink);overflow:hidden;display:flex;flex-direction:column;box-shadow:7px 7px 0 var(--accent)}
+.card[hidden]{display:none}
+.card{scroll-margin-top:70px}
+.card-top{background:var(--accent);color:#fff;padding:18px 22px 16px}
+.num{font-family:var(--display);font-weight:800;font-size:15px;background:#fff;color:var(--accent-text);border-radius:999px;padding:2px 10px;display:inline-block}
+.card h2{font-family:var(--display);font-weight:800;font-size:clamp(30px,4vw,40px);line-height:1;margin:10px 0 6px;letter-spacing:-.02em}
+.place{font-weight:700;font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.75);font-size:12.5px;font-weight:700;padding:2px 10px;border-radius:999px}
+.facts{display:grid;grid-template-columns:1fr 1fr;border-bottom:2px dashed var(--line)}
+.fact{padding:12px 22px}
+.fact + .fact{border-left:2px dashed var(--line)}
+.fact b{display:block;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fact span{font-weight:700;font-size:15px}
+.buy{margin:16px 22px 0;background:var(--cream);border-radius:14px;padding:12px 16px;border-left:6px solid var(--accent)}
+.buy b{font-family:var(--display);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-text)}
+.buy p{margin:2px 0 0;font-weight:500}
+.card-body{padding:6px 22px 18px;flex:1}
+.card-body h3{font-family:var(--display);font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:18px 0 4px;color:var(--accent-text)}
+.card-body p{margin:0 0 6px;font-size:16px}
+details{border-top:2px dashed var(--line);padding:10px 22px 14px}
+summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--muted)}
+details ul{margin:8px 0 0;padding-left:18px;font-size:14px}
+details li{margin-bottom:4px;word-break:break-word}
+
+.accent-orange{--accent:var(--orange);--accent-text:#A8480A}
+.accent-red{--accent:var(--red);--accent-text:#B00022}
+.accent-green{--accent:var(--green);--accent-text:var(--deep-green)}
+
+footer{background:var(--ink);color:#f3ece2}
+.foot-inner{max-width:1120px;margin:0 auto;padding:40px 20px 50px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+footer h2{font-family:var(--display);margin:0 0 10px;color:#fff}
+footer p{margin:0 0 10px;font-size:15px;color:#d9d1c5}
+footer a{color:#ffb070}
+@media (max-width:760px){.foot-inner{grid-template-columns:1fr}}
+.empty{display:none;text-align:center;font-weight:700;padding:40px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="stripes"></div>
+<header class="hero">
+  <div class="bubbles" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="hero-inner">
+    <div class="kicker"><span class="dot"></span>A field guide to where the world actually shops</div>
+    <h1><span class="o">Corner</span> of<br>the <span class="r">World</span><span class="g">.</span></h1>
+    <p class="dek">21 supermarkets, corner stores, kiosks and co-ops that run daily life in their countries &mdash; what to grab, how they got there, and what they mean to the people who shop there every day.</p>
+  </div>
+</header>
+<div class="stripes thin"></div>
+
+<section class="intro">
+  <div>
+    <h2>Why a grocery store tells you more than a monument</h2>
+    <p>Every country has a store its people would name first if you asked where they buy milk. In Spain it is a supermarket with a cult own-brand. In Mexico it is a 24-hour corner shop where you also pay the electricity bill. In Norway it is a railway newsstand that learned to sell hot dogs. The format changes from place to place, and that change is the point: it shows whether people do one big weekly shop or five small ones, whether they drive or walk, and whether the store doubles as a bank, a post office or a political argument.</p>
+    <p>Each entry here is a local institution, picked because it has a story worth telling rather than because it is large. We bent the strictly-local rule once, for Thailand&rsquo;s 7-Eleven, because a Thai conglomerate has run it since 1987 and made it something unmistakably Thai.</p>
+  </div>
+  <aside class="callout">
+    <h3>A note on Japan</h3>
+    <p style="margin:0">Japan&rsquo;s konbini are the world benchmark for the convenience store, and so thoroughly covered already that we left them out. Treat them as the yardstick every entry here is quietly measured against.</p>
+    <h3>How to read the cards</h3>
+    <ul>
+      <li><b>Format</b> labels keep the mix honest: co-op, hard discounter, kiosk, minimarket, supermarket.</li>
+      <li><b>Grab this</b> is what locals would tell you to buy, or do, there.</li>
+      <li>Store counts are the latest published figures and carry a date; chains this size change fast.</li>
+    </ul>
+  </aside>
+</section>
+
+<nav class="filters" aria-label="Filter stores">
+  <div class="filters-inner" id="filters">
+    <span class="label">Region</span>
+    <button class="chip" data-kind="region" data-value="all" aria-pressed="true">All</button>
+    <button class="chip" data-kind="region" data-value="Europe" aria-pressed="false">Europe</button>
+    <button class="chip" data-kind="region" data-value="Asia" aria-pressed="false">Asia</button>
+    <button class="chip" data-kind="region" data-value="Africa &amp; Middle East" aria-pressed="false">Africa &amp; Middle East</button>
+    <button class="chip" data-kind="region" data-value="Americas" aria-pressed="false">Americas</button>
+    <span class="sep"></span>
+    <span class="label">Format</span>
+    <button class="chip" data-kind="format" data-value="all" aria-pressed="true">All</button>
+    <button class="chip" data-kind="format" data-value="big" aria-pressed="false">Big shop</button>
+    <button class="chip" data-kind="format" data-value="small" aria-pressed="false">Corner shop</button>
+    <span class="count" id="count"></span>
+  </div>
+</nav>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No stores match that combination &mdash; try another filter.</p>
+</main>
+
+<div class="stripes thin"></div>
+<footer>
+  <div class="foot-inner">
+    <div>
+      <h2>Method</h2>
+      <p>Entries were chosen for local identity and story, not size. Each was checked against company filings or official histories, national press and trade publications; sources sit under every card. Store counts are the most recent published figures as of September 2026 and are dated on each card.</p>
+      <p>Where sources disagreed we say so or use the more conservative figure. Where a claim is contested &mdash; the Woolworths bag in a parliamentary inquiry, the Esselunga&ndash;Coop court fight &mdash; we describe it as a claim, not a finding.</p>
+    </div>
+    <div>
+      <h2>Left on the shelf</h2>
+      <p>Japan&rsquo;s konbini, the benchmark and exhaustively covered. Australia and New Zealand, where the big chains are a duopoly without a story that stands apart from the others here. Runners-up for a future edition: Saigon Co.op in Vietnam, and Tambo+ in Peru, the convenience chain run by the family behind Inca Kola.</p>
+    </div>
+  </div>
+  <div class="stripes"></div>
+</footer>
+
+<script>
+const STORES = [
+{
+ name:"Mercadona", country:"Spain", flag:"\u{1F1EA}\u{1F1F8}", region:"Europe", scale:"big", format:"Supermarket", accent:"orange",
+ founded:"1977, Valencia region", footprint:"1,637 stores in Spain plus 39 in Portugal (Jan 2026)",
+ buy:"Anything Hacendado, the house brand. The almond milk has caused actual stockpiling.",
+ story:"Francisco Roig and Trinidad Alfonso turned part of their family meat business into grocery shops in 1977. In 1981 their son Juan Roig bought the company from his parents, when it was eight small stores in Valencia. He built it around a tight group of long-term suppliers making own-brand goods — Hacendado for food, Deliplus for personal care, Bosque Verde for cleaning — and a house rule that the customer is El Jefe, the boss. By Roig's own account the name was borrowed from an Italian pasta brand with one letter dropped.",
+ meaning:"Mercadona holds roughly 30% of Spanish grocery retail, far ahead of Carrefour and Lidl, and the US Department of Agriculture has described it in its own retail reporting as a cultural phenomenon. Its superfans are a recognised type: the comedy duo Pantomima Full mocked them in a 2017 sketch that went viral. Portuguese shoppers drive across the border for Hacendado, and the chain now has stores in Portugal too.",
+ sources:[["Xataka: USDA calls Mercadona a cultural phenomenon","https://www.xataka.com/magnet/mercadona-ha-crecido-espana-que-para-eeuu-no-solo-cadena-supermercados-fenomeno-cultural"],["The Portugal News: The pilgrimage to Mercadona","https://www.theportugalnews.com/news/2026-01-11/the-pilgrimage-to-mercadona/940764"],["El Independiente: Mercadona for geeks","https://www.elindependiente.com/economia/2020/02/01/mercadona-para-frikis-de-la-primera-tienda-al-bulo-sobre-el-nombre/"],["Wikipedia: Mercadona","https://en.wikipedia.org/wiki/Mercadona"]]
+},
+{
+ name:"Migros", country:"Switzerland", flag:"\u{1F1E8}\u{1F1ED}", region:"Europe", scale:"big", format:"Cooperative", accent:"orange",
+ founded:"1925, Zurich", footprint:"Switzerland's largest retailer and employer; about 2.3m co-op members",
+ buy:"Migros Ice Tea, a black tea and rosehip recipe unchanged since 1984. What you will not find: beer or wine.",
+ story:"Gottlieb Duttweiler started Migros in 1925 with five delivery trucks selling six staples — coffee, rice, sugar, pasta, coconut oil and soap — village to village, cutting out the middlemen. Established producers boycotted him, so from 1928 Migros began making its own goods, often cheaper versions of branded products. That same year he banned alcohol from the shelves, framing it as protecting public health against a powerful drinks industry. In 1941 he handed the company to its customers by converting it into a cooperative.",
+ meaning:"The alcohol ban is the national talking point. In June 2022 members of all ten regional cooperatives voted to keep it, on record turnout of more than 630,000 — members were offered free chocolate for voting. The irony every Swiss shopper knows: Denner, the discounter Migros owns, often sits in the same complex and sells alcohol. Migros puts it plainly — it is as much a part of Switzerland as mountains and watches.",
+ sources:[["Le News: Migros stays alcohol-free after clear no vote","https://lenews.ch/2022/06/16/migros-to-stay-alcohol-free-after-clear-no-vote/"],["The Local: Migros to remain alcohol-free after vote","https://www.thelocal.ch/20220616/swiss-retail-giant-migros-to-remain-alcohol-free-after-vote"],["Migros: own-brand history, including the iced tea","https://corporate.migros.ch/en/story/migros-own-brand-history"],["Migros: our story","https://corporate.migros.ch/en/about-us/our-story"]]
+},
+{
+ name:"Esselunga", country:"Italy", flag:"\u{1F1EE}\u{1F1F9}", region:"Europe", scale:"big", format:"Supermarket", accent:"red",
+ founded:"1957, Milan", footprint:"About 160 stores across northern and central Italy",
+ buy:"A peach. Since 2023 every Italian gets the joke.",
+ story:"Italy's first supermarket opened in a converted Milan workshop in 1957, majority-owned by Nelson Rockefeller's company Ibec, with the Caprotti brothers and the Crespi family — owners of Corriere della Sera — as minority partners. The Caprottis later bought out the Americans. The name came from customers: the ads showed a long S for Supermarket, and shoppers started calling it esse lunga. In 2007 Bernardo Caprotti published a book accusing Italy's left-linked Coop chains of using political ties to block his stores; a Milan court ruled in 2011 that it unfairly denigrated Coop, and the litigation ran on for years afterward.",
+ meaning:"Esselunga is a Milanese institution with a knack for landing in the national argument. Its 2023 advert La Pesca, in which a girl gives her separated father a peach and says it is from her mother, split Italy over how it portrayed divorce. Prime Minister Giorgia Meloni called it beautiful and touching; weeks later, when she announced her own separation, the ad came back as a meme.",
+ sources:[["Little eat-aly: the first Italian supermarket","https://littleeataly.substack.com/p/the-first-italian-supermarket"],["Italics Magazine: Esselunga, an Italian success story","https://italicsmag.com/2018/11/29/esselunga-italian-success-editorial/"],["Il Fatto Quotidiano: Caprotti convicted over Falce e carrello","https://www.ilfattoquotidiano.it/2011/09/17/il-patron-di-esselunga-caprotti-condannato-per-il-libro-falce-e-carrello/158119/"],["L'Unione Sarda: La Pesca divides the web","https://www.unionesarda.it/en/italy/la-pesca-the-new-esselunga-commercial-about-the-children-of-separated-parents-divides-meloni-beautiful-and-touching-qmfv3fpn"]]
+},
+{
+ name:"Albert Heijn", country:"Netherlands", flag:"\u{1F1F3}\u{1F1F1}", region:"Europe", scale:"big", format:"Supermarket", accent:"green",
+ founded:"1887, Oostzaan", footprint:"The largest Dutch chain, with a 37.7% market share (2024)",
+ buy:"Whatever is on offer during the Hamsterweken, the hamster weeks of two-for-one deals.",
+ story:"Albert Heijn took over his parents' grocery in the village of Oostzaan in 1887; that first shop still stands as a museum at Zaanse Schans. His grandsons turned it into the country's biggest grocer, pioneering self-service shopping and own-label goods, popularising wine and kiwi fruit in Dutch kitchens, and pushing for the international barcode standard in the 1970s. The Dutch call it AH, or affectionately Appie.",
+ meaning:"The Dutch verb for stockpiling is hamsteren, and since 2003 by the company's own count AH has advertised its bulk deals with a family of cartoon hamsters — now among the longest-running brand characters in Dutch advertising, with an Esprix award for long-term impact and a Facebook group where collectors trade the plush versions at organised swap afternoons. During the pandemic, when hoarding stopped being funny, the hamsters vanished from the ads for about 18 months.",
+ sources:[["Wikipedia: Albert Heijn","https://en.wikipedia.org/wiki/Albert_Heijn"],["Wikipedia: Ahold, company history","https://en.wikipedia.org/wiki/Ahold"],["AH newsroom: the hamsters turn 20","https://nieuws.ah.nl/albert-heijn-hamsters-zijn-jarig/"],["Trending.nl: hamsteren, where does it come from?","https://www.trending.nl/eten-drinken/hamsteren-wat-is-het-en-waar-komt-het-vandaan/"]]
+},
+{
+ name:"Tesco", country:"United Kingdom", flag:"\u{1F1EC}\u{1F1E7}", region:"Europe", scale:"big", format:"Supermarket and small-format stores", accent:"red",
+ founded:"1919, Hackney, London", footprint:"About 5,000 stores (2026), from superstores to Express corner shops",
+ buy:"The meal deal: a main, a snack and a drink for one price — £3.85 with a Clubcard since August 2025.",
+ story:"Jack Cohen, son of Jewish immigrants from Poland, came home from the First World War and started selling surplus groceries from a market stall in Hackney in 1919. The name arrived in 1924 on a batch of tea: three letters from his supplier T.E. Stockwell, plus the first two of Cohen. The first shop followed at Burnt Oak, Edgware, and the company floated in 1947. It is now Britain's biggest grocer.",
+ meaning:"Tesco did not invent the meal deal — Boots is usually credited — but it owns the argument. There are rate-my-meal-deal accounts, Reddit threads, a 2025 Channel 4 documentary and a Tesco ad campaign built entirely on the debate. The chain's own sales data put a chicken club sandwich, an egg protein pot and a Coke at the top in 2024. When the price rose 25p in August 2025, it made the news.",
+ sources:[["Wikipedia: Tesco","https://en.wikipedia.org/wiki/Tesco"],["Creativebrief: Tesco celebrates the meal deal phenomenon","https://www.creativebrief.com/bite/hot-pick/tesco-celebrates-cultural-phenomenon-meal-deal"],["Connect Vending: the evolution of the meal deal","https://connectvending.co.uk/blog/the-evolution-of-the-workplace-meal-deal/"],["Harry Wallop: what is Britain's favourite meal deal?","https://harrywallop.substack.com/p/whats-britains-favourite-meal-deal"]]
+},
+{
+ name:"Żabka", country:"Poland", flag:"\u{1F1F5}\u{1F1F1}", region:"Europe", scale:"small", format:"Convenience", accent:"green",
+ founded:"1998, Swarzędz near Poznań", footprint:"12,339 stores in Poland and Romania (end of 2025), Europe's largest convenience network",
+ buy:"A hot dog and a takeaway coffee from the Żabka Café counter, the chain's best-selling snacks since 2012.",
+ story:"The wholesaler Mariusz Świtalski opened the first little frog in 1998, just as big foreign hypermarkets were arriving in Poland, betting that neighbourhoods would still want small shops. It passed through a series of private-equity owners, swapped its yellow frog logo for a calmer green in 2016, and listed in Warsaw in 2024 in one of the largest IPOs in that exchange's history. Almost every store is run by a franchisee.",
+ meaning:"The density is the joke: by the company's claim, nearly a third of Poles live within 300 metres of one, and spotting several on a single street is a national meme. It is also contested. Critics point to its treatment of franchisees and to a legal loophole that lets it trade on Sundays despite Poland's trading ban. Its Żappka app and unstaffed Nano stores make it a bellwether for cashierless retail in Europe.",
+ sources:[["Żabka Group: 2025 full-year performance","https://zabkagroup.com/zabka-group-2025-performance-net-profit-exceeds-pln-1-billion-asexpansion-accelerates-and-key-metrics-reach-strategic-growth-targets/"],["Notes from Poland: the little frog that took over Poland's high streets","https://notesfrompoland.com/2021/07/01/the-little-frog-that-has-taken-over-polands-high-streets/"],["Notes from Poland: Żabka reaches 100 stores in Romania","https://notesfrompoland.com/2025/06/13/polands-largest-convenience-chain-zabka-reaches-100-stores-in-romania/"],["Retail Times: Żabka at 25","https://retailtimes.co.uk/zabka-celebrates-25th-anniversary-and-debuts-three-new-store-formats/"]]
+},
+{
+ name:"Narvesen", country:"Norway", flag:"\u{1F1F3}\u{1F1F4}", region:"Europe", scale:"small", format:"Kiosk", accent:"orange",
+ founded:"1894, Norwegian railway stations", footprint:"Several hundred kiosks in Norway, plus Latvia and Lithuania",
+ buy:"Pølse i lompe: a hot dog wrapped in a soft potato flatbread instead of a bun.",
+ story:"Bertrand Narvesen, a former postal clerk, noticed that train passengers liked to read. In 1894 he won the right to sell newspapers, magazines and travel books across the state railway's stations, and by the end of that first year he had kiosks at nine of them. In 1897 he ran an architecture competition to design better ones. The newsstand became a snack stop, merged with the national dining-car company in 1975, and has belonged to the Reitan retail group since 2000.",
+ meaning:"Narvesen is where Norway's hot-dog habit lives. The average Norwegian eats around 100 pølser a year, and they are a fixture of National Day on 17 May. The dedicated hot-dog stands of the past have mostly disappeared, which leaves kiosks like this one as the default. It is still where you buy a paper for a long train ride — the business it started in.",
+ sources:[["Reitan Retail: our business","https://www.reitanretail.no/en/about/our-business"],["Wikipedia: Narvesen","https://en.wikipedia.org/wiki/Narvesen"],["Life in Norway: the Norwegian pølse","https://www.lifeinnorway.net/norwegian-polse/"],["The Norway Guide: Norwegian hot dogs","https://thenorwayguide.com/norwegian-hot-dogs/"]]
+},
+{
+ name:"Bónus", country:"Iceland", flag:"\u{1F1EE}\u{1F1F8}", region:"Europe", scale:"big", format:"Discounter", accent:"red",
+ founded:"1989, Reykjavík", footprint:"33 stores in Iceland and eight in the Faroe Islands",
+ buy:"Skyr, cheap, from the walk-in chilled room that stands in for proper fridges. Look for the pink piggy bank.",
+ story:"Jóhannes Jónsson was made redundant in 1987 and in 1989 opened Iceland's first low-price supermarket with his son Jón Ásgeir, in a 400-square-metre unit in Reykjavík. Within a few years it was the country's biggest chain. Its success financed Baugur Group, which went on an international shopping spree and filed for bankruptcy protection in 2009 as Iceland's banking system collapsed. The stores kept trading, under the Hagar group.",
+ meaning:"In an expensive island country, Bónus is where locals and budget travellers stretch their krónur, and the founder became a folk figure known as Jói í Bónus. The wonky-eyed pig logo is genuinely loved. When the chain straightened the eye and modernised the typeface in 2021, Icelanders mourned it publicly and turned it into memes.",
+ sources:[["Wikipedia: Bónus","https://en.wikipedia.org/wiki/B%C3%B3nus"],["Wikipedia: Baugur Group","https://en.wikipedia.org/wiki/Baugur_Group"],["Iceland Review: mascot's controversial makeover","https://www.icelandreview.com/news/bonus-lengthens-opening-hours-gives-mascot-controversial-makeover/"],["Wikipedia: Jóhannes Jónsson","https://en.wikipedia.org/wiki/J%C3%B3hannes_J%C3%B3nsson"]]
+},
+{
+ name:"BİM", country:"Türkiye", flag:"\u{1F1F9}\u{1F1F7}", region:"Europe", scale:"small", format:"Hard discounter", accent:"red",
+ founded:"1995", footprint:"12,571 stores in Türkiye, plus 933 in Morocco and 445 in Egypt (2025)",
+ buy:"Whatever is in the Aktüel, the catalogue of limited-stock specials refreshed on set days each week — olive oil one day, pressure cookers and e-bikes the next.",
+ story:"BİM brought the hard-discount model to Türkiye in 1995 with 21 stores, a deliberately short product list and heavy use of private labels. It grew to nearly 5,000 stores by 2015 and past 12,000 today, making it one of the largest grocery chains in the world by store count. It later added the File supermarket banner and pushed into North Africa.",
+ meaning:"Ask Turks to name the country's supermarket and most say BİM, its red-and-white sign on seemingly every block. Shoppers like that there is usually one option per product, so choosing is quick, and that you can top up an Istanbul transit card at the till. The specials sustain an entire ecosystem of catalogue apps and deal sites. It sits alongside the weekly neighbourhood pazar rather than replacing it.",
+ sources:[["Wikipedia: BİM","https://en.wikipedia.org/wiki/Bim_(company)"],["The Art of Living in Turkey: Istanbul supermarkets","https://theartoflivinginturkey.com/istanbul-supermarkets/"],["Akakçe: BİM Aktüel catalogue","https://www.akakce.com/brosurler/bim"],["Echoes of Turkey: Turkish grocery stores explained","https://echoesofturkey.com/2026/01/07/turkish-grocery-stores-explained/"]]
+},
+{
+ name:"LuLu", country:"United Arab Emirates", flag:"\u{1F1E6}\u{1F1EA}", region:"Africa & Middle East", scale:"big", format:"Hypermarket", accent:"green",
+ founded:"First hypermarket 1995, Abu Dhabi", footprint:"More than 200 hypermarkets and stores across the Gulf, Asia and beyond",
+ buy:"Home. Whatever you grew up eating in Kerala, Manila or Cairo, LuLu probably stocks the brand.",
+ story:"M.A. Yusuff Ali left Kerala for the Gulf as a teenager in the 1970s to work in his uncle's food distribution business, learning the trade across ports from Hong Kong to Singapore. After the 1991 Gulf War, when many expatriates and businesses left the region, he stayed and opened what became Abu Dhabi's largest supermarket. The first LuLu hypermarket followed in 1995, a 50,000-square-foot bet on a format the region barely knew. LuLu means pearl, a nod to the Gulf's pearling past.",
+ meaning:"In a country where most residents were born elsewhere, LuLu's story is the story of the people who built the Gulf. It won loyalty from expatriates and Emiratis alike by stocking familiar products from shoppers' home countries beside local goods. For South Asian workers in particular it is the shop that feels like home, and its founder is among the best-known Indian businessmen in the region.",
+ sources:[["Wikipedia: M.A. Yusuff Ali","https://en.wikipedia.org/wiki/M._A._Yusuff_Ali"],["Gray Matter Dubai: the lore of a legend","https://www.graymatterdubai.com/the-lore-of-a-legend/"],["DailyO: how Yusuff Ali made LuLu the Middle East's shopping destination","https://www.dailyo.in/news/how-keralas-yusuff-ali-made-lulu-hypermarket-the-shopping-destination-in-the-middle-east-36643"],["CEO India: the success story of LuLu Hypermarket","https://ceoindiamagazine.com/success-story-of-lulu-hypermarket/"]]
+},
+{
+ name:"Naivas", country:"Kenya", flag:"\u{1F1F0}\u{1F1EA}", region:"Africa & Middle East", scale:"big", format:"Supermarket", accent:"red",
+ founded:"July 1990, Rongai near Nakuru", footprint:"More than 110 outlets, Kenya's largest chain by branch network (2025)",
+ buy:"Look for the Naivas sign hanging over mall space that used to belong to Nakumatt.",
+ story:"In 1990 Joram Kamau, founder of the Tuskys chain, handed one of his shops in the village of Rongai to his nephews David Kimani and Simon Mukuha, who had worked for him for years; all they had to pay for was the stock. With their father Peter Mukuha Kago they grew it town by town — Elburgon in 1994, then Naivasha, which gave the chain its name — and reached Nairobi's Ronald Ngala Street in 2001.",
+ meaning:"Naivas is the survivor of a Kenyan retail bloodbath. Nakumatt, named for Nakuru Mattresses and once East Africa's largest retailer, collapsed under about $380m of debt; Uchumi and Tuskys fell too, and South Africa's Shoprite withdrew. Naivas bought Nakumatt's last branches for roughly $4m and kept expanding. Like its fallen rivals it traces its roots to Nakuru, a town that has produced a remarkable share of Kenya's supermarket dynasties.",
+ sources:[["Naivas: our history","https://naivas.info/history/"],["The Star: Naivas marks 35 years in Kenya's retail market","https://www.the-star.co.ke/business/kenya/2025-09-22-naivas-marks-35-years-in-kenyas-retail-market"],["Business Today Kenya: the collapse of supermarket chains","https://businesstoday.co.ke/the-collapse-of-supermarket-chains-nakumatt-collapse-ukwala-supermarkets-nakumatt/"],["Business Daily: from a small village shop to a supermarket chain","https://www.businessdailyafrica.com/bd/news/counties/naivas-from-a-small-village-shop-to-a-supermarket-chain-2262430"]]
+},
+{
+ name:"Woolworths", country:"South Africa", flag:"\u{1F1FF}\u{1F1E6}", region:"Africa & Middle East", scale:"big", format:"Upscale grocer and department store", accent:"green",
+ founded:"1931, Cape Town", footprint:"More than 1,600 stores group-wide (2026) across Africa and Australasia",
+ buy:"The butter-basted rotisserie chicken, roasted in store, carried home in the famous black bag.",
+ story:"Max Sonnenberg opened the first store in Cape Town in 1931, with his friend Elie Susman funding the expansion. It has no connection to the American Woolworth's or to Australia's Woolworths supermarkets. Since 1947 it has had a long-running relationship with Britain's Marks & Spencer, and it built its food business on the M&S model of premium own-label products. South Africans call it Woolies.",
+ meaning:"In South Africa the supermarket you shop at reads as a class marker, and Woolies sits at the top of that hierarchy. Its matte black reusable bag became a quiet status symbol, nicknamed the South African Birkin, complete with its own TikTok hashtag. In 2025 the bag turned up in politics, when a witness at a parliamentary inquiry claimed to have handed over cash in one, and the country promptly turned the claim into memes.",
+ sources:[["IOL: how the Woolworths bag became a status symbol","https://iol.co.za/lifestyle/style-beauty/fashion/2025-12-04-from-groceries-to-glamour-how-the-woolworths-bag-became-a-status-symbol-in-south-africa/"],["Wikipedia: Woolworths (South Africa)","https://en.wikipedia.org/wiki/Woolworths_(South_Africa)"],["The Conversation: which Woolies is that?","https://theconversation.com/which-woolies-is-that-25535"],["Woolworths: medium rotisserie chicken","https://www.woolworths.co.za/prod/_/A-2500470000008"]]
+},
+{
+ name:"DMart", country:"India", flag:"\u{1F1EE}\u{1F1F3}", region:"Asia", scale:"big", format:"Value hypermarket", accent:"orange",
+ founded:"2002, Powai, Mumbai", footprint:"About 500 locations across India (2026)",
+ buy:"The whole month's staples in one trip, from dal to detergent. Go on a weekday morning.",
+ story:"Radhakishan Damani was a celebrated and famously private stock-market investor — Rakesh Jhunjhunwala treated him as a mentor — before he opened the first DMart in Powai in 2002. Rather than running sales events, he offered consistently low everyday prices, and he bought or took long leases on store properties instead of renting, which held costs down for decades. He almost never gives interviews. When the parent company listed in 2017 the IPO was oversubscribed more than 100 times.",
+ meaning:"DMart is where India's aspiring middle class does the monthly shop, and the crowds are legendary enough that shoppers write survival guides for beating the queues and the baggage counter. Weekend parking is a local sport. It is the quiet counterpoint to India's app-driven grocery boom: plain stores, low prices, almost no advertising, and a stated mission simply to be the cheapest retailer wherever it operates.",
+ sources:[["DMart: about us","https://www.dmartindia.com/about-us"],["Wikipedia: DMart","https://en.wikipedia.org/wiki/DMart"],["Fynocrat: the silent billionaire who built DMart","https://blog.fynocrat.com/radhakishan-damani-the-silent-billionaire-who-built-3-lakh-crore-dmart-empire/"],["Nair Tejas: the definitive guide to surviving shopping at DMart","https://www.nairtejas.com/guides/definitive-guide-surviving-shopping-dmart/"]]
+},
+{
+ name:"Pangdonglai", country:"China", flag:"\u{1F1E8}\u{1F1F3}", region:"Asia", scale:"big", format:"Regional supermarket", accent:"red",
+ founded:"1995, Xuchang, Henan", footprint:"Around a dozen stores, all in Henan — on purpose",
+ buy:"Its own-brand DL beer, prized enough that resellers flip it online at double the price.",
+ story:"Yu Donglai opened a small liquor and cigarette shop in his hometown of Xuchang in 1995. Customers named it after his build: Pangdonglai means roughly Chubby Donglai. Unusually for a Chinese retailer it grew and then deliberately shrank, closing stores from 2014 to concentrate on a handful in Xuchang and Xinxiang. It pays well above the industry average and, announced in 2024, gives staff ten extra days of discretionary leave for when they do not feel mentally or emotionally well.",
+ meaning:"This is the counterpoint to scale: a regional grocer turned national pilgrimage site. Three of its stores drew roughly 1.1 million shoppers over three days of the 2024 Spring Festival holiday, travel agencies sell shopping tours to Xuchang, and netizens joke that it rates 6A on China's five-level tourist scale. Rival supermarkets now copy its methods, and some locals complain the tourists have stripped the shelves of the things they used to buy after work.",
+ sources:[["Daxue Consulting: Pang Dong Lai's impact on Chinese retail","https://daxueconsulting.com/pang-dong-lai/"],["SCMP: Chinese supermarket wins viral fame for stellar service","https://www.scmp.com/economy/china-economy/article/3296453/incomparably-nice-chinese-supermarket-wins-viral-fame-its-stellar-service"],["The World of Chinese: can a local supermarket save offline retail?","https://www.theworldofchinese.com/2025/04/can-a-local-supermarket-save-chinas-offline-retail-sector/"],["Wikipedia: Yu Donglai","https://en.wikipedia.org/wiki/Yu_Donglai"]]
+},
+{
+ name:"CU vs GS25", country:"South Korea", flag:"\u{1F1F0}\u{1F1F7}", region:"Asia", scale:"small", format:"Convenience, a rivalry", accent:"green",
+ founded:"Both 1990", footprint:"CU more than 18,000 stores; GS25 around 17,000 (2025)",
+ buy:"Triangle kimbap — samgak gimbap — rice and filling wrapped in seaweed, eaten walking.",
+ story:"Both chains started in 1990 under other names. GS25 was LG25 until the LG and GS groups split in 2005. CU was the Korean arm of Japan's FamilyMart until 2012, when its operator rebranded to build a Korean-style store and stop paying royalties to Tokyo; some franchisees sued over the sudden sign change, as LG25's had before them, and lost. The two are now almost exactly matched, and both claim to be number one — CU on store count and profitability, GS25 on sales revenue.",
+ meaning:"Korea's convenience stores are a second kitchen for a country of small apartments and single-person households, and a K-drama set piece. The rivalry shows up as spectacle: CU runs a ramyeon library in Hongdae stocking more than 225 varieties, GS25 a flagship with a pizza robot and a latte-art machine. Foreign spending at the big chains jumped 40 to 55% in early 2025. In 2025 the four major chains' combined store count fell for the first time since the industry began in 1988, which is pushing both of them overseas.",
+ sources:[["Wikipedia: CU (store)","https://en.wikipedia.org/wiki/CU_(store)"],["KED Global: CU and GS25 in fierce race for top spot","https://www.kedglobal.com/retail/newsView/ked202410070006"],["Daebak: Korean convenience store food culture","https://daebak.co/blogs/magazine/korean-convenience-store-food-culture"],["Seoul Economic Daily: CU surpasses 800 overseas stores","https://en.sedaily.com/finance/2026/06/04/cu-surpasses-800-overseas-stores-as-k-convenience-goes"]]
+},
+{
+ name:"Indomaret", country:"Indonesia", flag:"\u{1F1EE}\u{1F1E9}", region:"Asia", scale:"small", format:"Minimarket, a rivalry", accent:"orange",
+ founded:"June 1988, Ancol, North Jakarta", footprint:"About 23,200 stores against rival Alfamart's 20,700 (mid-2025)",
+ buy:"A Point Coffee at an Indomaret Point, the café-style format with seating and Wi-Fi.",
+ story:"The Salim Group, the conglomerate behind Indofood, opened the first store in an industrial part of Jakarta in 1988, initially to make daily shopping easier for its own employees. It was spelled Indomart until 1995, when a government push for Indonesian-language branding turned it into Indomaret. In 1997 it became the first Indonesian company to franchise minimarkets, which is what carried it across the archipelago.",
+ meaning:"Indomaret and Alfamart together hold roughly 92% of Indonesia's convenience market and famously open next door to each other; the local saying is that a site survey for one works just as well for the other. The exception is West Sumatra, including Padang, where authorities have refused both chains permits in order to protect traditional traders and warungs, and backed a local alternative called Minang Mart instead.",
+ sources:[["Wikipedia: Indomaret","https://en.wikipedia.org/wiki/Indomaret"],["New Distribution: Indonesia's convenience store duopoly","https://xinjignxiao.com/en/articles/deep-dive-into-indonesia-s-convenience-store-duopoly-indomaret-and-alfam-54e07d80/"],["VOI: Padang is the only area without Alfamart and Indomaret","https://voi.id/en/news/30948"],["detikFinance: no Indomaret and Alfamart in Padang","https://finance.detik.com/berita-ekonomi-bisnis/d-6969429/tak-ada-indomaret-dan-alfamart-di-padang-adanya-ini"]]
+},
+{
+ name:"NTUC FairPrice", country:"Singapore", flag:"\u{1F1F8}\u{1F1EC}", region:"Asia", scale:"big", format:"Union cooperative", accent:"red",
+ founded:"July 1973, Toa Payoh", footprint:"Singapore's largest chain: 100+ supermarkets plus 160-odd Cheers convenience stores",
+ buy:"FairPrice housebrand basics. Launched in the 1985 recession, the range now runs past 2,000 items.",
+ story:"In a 1971 speech Prime Minister Lee Kuan Yew argued that if shops raised prices unreasonably, people needed an alternative to buy from. Two years later, amid oil-crisis inflation, the National Trades Union Congress opened a cooperative supermarket in a Toa Payoh housing block to fight hoarding and profiteering; unions put up seed capital and members volunteered in the aisles after work. Lee opened it himself in July 1973. It merged with other union co-ops in 1983 to become FairPrice.",
+ meaning:"Its slogan is Singapore's very own, and it is the grocer of the public-housing heartlands — part shop, part social compact, with profits shared back to members as rebates. Prime ministers have used its anniversaries to restate the point that the cost of living stays a national concern. It exported the model too, forming the Co.opXtra hypermarket venture with Vietnam's Saigon Co.op.",
+ sources:[["Wikipedia: NTUC FairPrice","https://en.wikipedia.org/wiki/NTUC_FairPrice"],["NTUC: more than just a supermarket","https://www.ntuc.org.sg/uportal/news/welcome-to-fairprice-more-than-just-a-supermarket/"],["NTUC: critical social mission, 40 years and on","https://www.ntuc.org.sg/uportal/news/NTUC-FairPrice-Critical-social-mission-40-years-and-on/"],["Saigon Co.op: retail history","https://saigonco-op.com.vn/our-businesses/retail"]]
+},
+{
+ name:"7-Eleven Thailand", country:"Thailand", flag:"\u{1F1F9}\u{1F1ED}", region:"Asia", scale:"small", format:"Convenience, licensed", accent:"orange",
+ founded:"Thai rights acquired 1987", footprint:"More than 15,000 branches nationwide (2024), second only to Japan",
+ buy:"The ham-and-cheese toastie, pressed hot at the counter. There are 50-plus variations if you are feeling brave.",
+ story:"This is the one entry that bends the local rule, deliberately. The brand is American, but the Thai conglomerate Charoen Pokphand acquired the rights in 1987, and its CP All arm built one of the densest 7-Eleven networks on earth — more stores in Thailand than in the United States. It is less a foreign chain operating in Thailand than a Thai institution under a borrowed sign.",
+ meaning:"For Thais it is the nearest air-conditioned refuge, snack bar, pharmacy shelf and bill-payment counter, open all night. For visitors the toastie has become a rite of passage; Thai media reported in 2026 that tourists now treat it as a must-try rather than an everyday snack. The fame travels: Singapore's 7-Eleven launched its own Thai-inspired croissant toasties in December 2025.",
+ sources:[["The Nation: why Thailand's 7-Eleven has become a must-visit","https://www.nationthailand.com/blogs/life/40067769"],["Wikipedia: Charoen Pokphand","https://en.wikipedia.org/wiki/Charoen_Pokphand"],["SETHLUI.com: Thailand's viral toasties land in Singapore","https://sethlui.com/seven-eleven-toasties-singapore-dec-2025/"],["CK Travels: guide to Thailand 7-Eleven toasties","https://www.cktravels.com/thailand-7-eleven-toasties-guide/"]]
+},
+{
+ name:"Oxxo", country:"Mexico", flag:"\u{1F1F2}\u{1F1FD}", region:"Americas", scale:"small", format:"Convenience", accent:"red",
+ founded:"1978, Monterrey", footprint:"24,708 stores in Mexico (June 2026), plus Brazil, Chile, Colombia, Peru and the US",
+ buy:"Pay the electricity bill, top up a phone and grab a cold caguama, all at one counter.",
+ story:"The Cuauhtémoc brewery opened the first Oxxo in Monterrey in 1978. Now owned by FEMSA, which also runs Mexico's Coca-Cola bottling, it went from fewer than 2,000 stores in 2000 to nearly 25,000, still adding more than two a day net in its home market in its 48th year. In 2024 it crossed the border, buying 249 US convenience stores and rebranding them in West Texas from 2025.",
+ meaning:"The slogan translates roughly as on the corner of your life, which Mexicans say is barely an exaggeration. Around 13 million people pass through daily. The stores double as the country's informal bank: many Mexicans without bank accounts pay utility bills, send money and settle online purchases by handing cash to an Oxxo cashier. Its fintech arm, Spin by OXXO, grew directly out of that role and now counts tens of millions of users.",
+ sources:[["Mexico News Daily: all about Oxxo","https://mexiconewsdaily.com/business/mexico-in-numbers-all-about-oxxo-mexicos-convenience-store-giant/"],["The Rio Times: OXXO closes in on 25,000 stores","https://www.riotimesonline.com/oxxo-25000-stores-mexico-femsa/"],["IDEO: in Mexico, redefining retail","https://www.ideo.com/case-study/femsa"],["Wikipedia: Oxxo","https://en.wikipedia.org/wiki/Oxxo"]]
+},
+{
+ name:"No Frills", country:"Canada", flag:"\u{1F1E8}\u{1F1E6}", region:"Americas", scale:"big", format:"Discounter, and the No Name brand", accent:"orange",
+ founded:"1978, Toronto", footprint:"No Name is stocked in every Loblaw-owned store in the country",
+ buy:"Anything in bright yellow packaging with lowercase black type: the No Name brand.",
+ story:"In March 1978, with food inflation biting and Loblaw in financial trouble, the company launched No Name — 16 unbranded products in plain packaging promising savings of 10 to 40%, beating a rival's generic line to market by 24 hours. Designer Don Watt chose lowercase black Helvetica on bright yellow rather than the black-on-white everyone else used. That July, president Dave Nichol opened the first No Frills in a Loblaws slated for closure in East York, reasoning that shoppers willing to skip brand frills might skip store frills too.",
+ meaning:"The yellow packs are Canadian design history and everyday Canadian thrift at once, found from Toronto to the High Arctic. The brand's marketing leans hard into self-parody, and when it launched No Name beer the story went international. Within four months of the 1978 launch, generics accounted for nearly a tenth of Canadian supermarket sales. For many Canadians the yellow box still means being careful with money.",
+ sources:[["Wikipedia: No Name (brand)","https://en.wikipedia.org/wiki/No_Name_(brand)"],["Canadian Grocer: No Name still generates buzz","https://canadiangrocer.com/no-name-still-generates-buzz-nearly-50-years-after-its-launch"],["The Canadian Encyclopedia: Loblaw Companies Limited","https://www.thecanadianencyclopedia.ca/en/article/loblaw-companies-limited"],["Wikipedia: No Frills","https://en.wikipedia.org/wiki/No_Frills_(grocery_store)"]]
+},
+{
+ name:"Assaí Atacadista", country:"Brazil", flag:"\u{1F1E7}\u{1F1F7}", region:"Americas", scale:"big", format:"Atacarejo, wholesale-retail", accent:"green",
+ founded:"October 1974, São Paulo", footprint:"More than 300 stores across all five Brazilian regions",
+ buy:"Mozzarella by the block. Assaí's first customers were pastry shops, and by 1985 it was the region's biggest mozzarella seller.",
+ story:"Rodolfo Jungi Nagai opened the first store in São Paulo in 1974 to supply small food businesses, pastry shops above all. The name comes from the Japanese word asahi, rising sun. Grupo Pão de Açúcar bought 60% in 2007 and later all of it; in 2021 Assaí was spun off as an independent company listed in São Paulo and New York. We chose it over the better-known Atacadão, which Carrefour has owned since 2007.",
+ meaning:"Brazilians call the format atacarejo, a blend of atacado and varejo — wholesale and retail. Warehouse prices, goods on pallets, and families shopping in bulk like small businesses. As household budgets tightened, it displaced the glossy hypermarket at the centre of Brazilian grocery shopping. Assaí finished converting 66 former hypermarkets in 2024, and Carrefour is converting many of its own Brazilian stores to the format too.",
+ sources:[["Assaí investor relations: about us","https://ri.assai.com.br/en/the-assai/about-us/"],["Wikipedia: Assaí Atacadista","https://en.wikipedia.org/wiki/Assa%C3%AD_Atacadista"],["The Robin Report: Brazil's cash and carry market","https://therobinreport.com/brazils-cash-carry-market-at-risk/"],["SiiLA: Carrefour loses ground as Atacadão and Assaí expand","https://siila.com/news/carrefour-loses-ground-brazil-atacadao-assai-expand/8305"]]
+}
+];
+
+const grid = document.getElementById('grid');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+STORES.forEach((s, i) => {
+  const el = document.createElement('article');
+  el.className = 'card accent-' + s.accent;
+  el.dataset.region = s.region;
+  el.dataset.scale = s.scale;
+  el.id = 'store-' + (i + 1);
+  el.innerHTML =
+    '<div class="card-top">' +
+      '<span class="num">No. ' + String(i + 1).padStart(2, '0') + '</span>' +
+      '<h2>' + esc(s.name) + '</h2>' +
+      '<div class="place">' + s.flag + ' ' + esc(s.country) + '</div>' +
+      '<div class="tags"><span class="tag">' + esc(s.format) + '</span><span class="tag">' + esc(s.region) + '</span></div>' +
+    '</div>' +
+    '<div class="facts">' +
+      '<div class="fact"><b>Founded</b><span>' + esc(s.founded) + '</span></div>' +
+      '<div class="fact"><b>Footprint</b><span>' + esc(s.footprint) + '</span></div>' +
+    '</div>' +
+    '<div class="buy"><b>Grab this</b><p>' + esc(s.buy) + '</p></div>' +
+    '<div class="card-body">' +
+      '<h3>The story</h3><p>' + esc(s.story) + '</p>' +
+      '<h3>What it means locally</h3><p>' + esc(s.meaning) + '</p>' +
+    '</div>' +
+    '<details><summary>Sources (' + s.sources.length + ')</summary><ul>' +
+      s.sources.map(function (src) {
+        return '<li><a href="' + esc(src[1]) + '" target="_blank" rel="noopener">' + esc(src[0]) + '</a></li>';
+      }).join('') +
+    '</ul></details>';
+  grid.appendChild(el);
+});
+
+const state = { region: 'all', format: 'all' };
+function apply() {
+  let n = 0;
+  document.querySelectorAll('.card').forEach(function (c) {
+    const ok = (state.region === 'all' || c.dataset.region === state.region) &&
+               (state.format === 'all' || c.dataset.scale === state.format);
+    c.hidden = !ok;
+    if (ok) n++;
+  });
+  document.getElementById('count').textContent = n + ' of ' + STORES.length + ' stores';
+  document.getElementById('empty').style.display = n ? 'none' : 'block';
+}
+document.getElementById('filters').addEventListener('click', function (e) {
+  const b = e.target.closest('.chip');
+  if (!b) return;
+  state[b.dataset.kind] = b.dataset.value;
+  document.querySelectorAll('.chip[data-kind="' + b.dataset.kind + '"]').forEach(function (x) {
+    x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+  });
+  apply();
+});
+apply();
+</script>
+</body>
+</html>
